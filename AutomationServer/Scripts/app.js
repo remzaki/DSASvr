@@ -27,6 +27,13 @@ $("#updateForm").validate({
     }
 });
 
+var uri = "";
+var site = document.URL;
+site = site.toUpperCase();
+if (site.match("/DSA")) {
+    uri = 'DSA';
+}
+
 var viewModel = function () {
     var self = this;
     var tokenKey = 'accessToken';
@@ -46,7 +53,7 @@ var viewModel = function () {
 
             $.ajax({
                 type: 'POST',
-                url: '/token',
+                url: uri + '/token',
                 data: loginData
             }).done(function (data) {
                 self.user(data.userName);
@@ -54,12 +61,12 @@ var viewModel = function () {
                 sessionStorage.setItem(tokenKey, data.access_token);
                 $('#accountModal').modal('hide');
                 self.login_msg('');
+                formElement.reset();
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 self.login_msg(jqXHR.responseJSON.error_description);
             });
 
             validator.resetForm();
-            formElement.reset();
         }
     }
 
