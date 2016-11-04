@@ -27,13 +27,6 @@ $("#updateForm").validate({
     }
 });
 
-var uri = "";
-var site = document.URL;
-site = site.toUpperCase();
-if (site.match("/DSA")) {
-    uri = 'DSA';
-}
-
 var viewModel = function () {
     var self = this;
     var tokenKey = 'accessToken';
@@ -53,7 +46,7 @@ var viewModel = function () {
 
             $.ajax({
                 type: 'POST',
-                url: uri + '/token',
+                url: './token',
                 data: loginData
             }).done(function (data) {
                 self.user(data.userName);
