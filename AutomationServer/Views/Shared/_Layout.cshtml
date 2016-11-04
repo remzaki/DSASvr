@@ -16,26 +16,100 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Automation", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Elements", "Index", "Element", new { area = "" }, null)</li>
                     <li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#accountModal" data-bind="visible: !user(), click: selectAccount.bind($data, null)">Login</a>
+                        <a href="#" data-toggle="modal" data-target="#accountModal" data-bind="text: user, visible: user, click: selectAccount.bind($data, 'Update')"></a>
+                    </li>
                 </ul>
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="accountModal" tabindex="-1" role="dialog" aria-labelledby="accountModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="accountModalLabel">Account</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm" data-bind="submit: Login, visible: !account_act()">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <label for="user-email">Email:</label>
+                                <div class="input-group">
+                                    <input data-bind="value: null" name="email" type="text" class="form-control" id="user-email" aria-describedby="basic-addon2" value="" />
+                                    <span class="input-group-addon" id="basic-addon2">@@unitedhealthone.com</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="user-password" class="control-label">Password:</label>
+                                    <input data-bind="value: null" type="password" name="password" class="form-control" id="user-password" value="" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-info">
+                                <p>For assistance you may contact the <a href="mailto:rcogonon@unitedhealthone.com">Administrator</a></p>
+                                <input type="submit" class="btn btn-primary" value="Login" />
+                            </div>
+                        </div>
+                    </form>
+                    <form id="updateForm" data-bind="submit: UserPassword">
+                        <div class="row" data-bind="visible: account_act">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label for="user-email">Email:</label>
+                                    <p data-bind="text: user" class="form-control-static"></p>
+                                </div>
+                                <div class="form-group">
+                                    <label for="user-old-password" class="control-label">Old Password:</label>
+                                    <input type="password" name="oldpassword" class="form-control" id="user-old-password" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="user-new-password" class="control-label">New Password:</label>
+                                    <input type="password" name="newpassword" class="form-control" id="user-new-password" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="user-confirm-password" class="control-label">Confirm Password:</label>
+                                    <input type="password" name="confirmpassword" class="form-control" id="user-confirm-password" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-info">
+                                <p>For assistance you may contact the <a href="mailto:rcogonon@unitedhealthone.com">Administrator</a></p>
+                                <input type="submit" class="btn btn-primary" value="Change Password"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <label class="error" data-bind="text: login_msg" style="float:left;font-size:100%;font-weight:normal;text-align:left;width:70%;"></label>
+                    <button class="btn btn-warning" data-bind="click: Logout, visible: account_act">Logout</button>
+                    <button class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - DS Automation</p>
         </footer>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/app")
     @RenderSection("scripts", required: false)
 </body>
 </html>

@@ -13,5 +13,14 @@
 input,
 select,
 textarea {
-    max-width: 280px;
+    /*max-width: 280px;*/
+}
+
+label.error {
+    color: darkorange;
+    font-size: 80%;
+}
+
+.form-info {
+    margin-top: 30px;
 }
