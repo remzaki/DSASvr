@@ -112,7 +112,7 @@ var elementModel = function () {
         });
     }
 
-    var ElementsUri = '/api/elements';
+    var ElementsUri = './api/elements';
     function getAllElements() {
         self.loading(true);
         ApiRequest(ElementsUri, 'GET').done(function (data) {
@@ -327,7 +327,7 @@ var viewModel = function () {
 
             $.ajax({
                 type: 'POST',
-                url: '/api/Account/ChangePassword',
+                url: './api/Account/ChangePassword',
                 headers: headers,
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(accountData)
