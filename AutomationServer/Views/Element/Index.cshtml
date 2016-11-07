@@ -1,3 +1,109 @@
-﻿
-<h2>Elements Dictionary</h2>
-
+﻿<!-- ko with: elementModel -->
+<div class="modal fade" id="elementModal" tabindex="-1" role="dialog" aria-labelledby="elementModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form data-bind="submit: submitElement" id="elementForm">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 data-bind="text: mod_title" class="modal-title" id="elementModalLabel"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="view" data-bind="visible: act() == 'View' && !mod_loading()">
+                        <p><strong class="ename" data-bind="text: name"></strong></p>
+                        <p><label>CSS Selector:</label><br /><code data-bind="text: value" class="val"></code></p>
+                        <p data-bind="visible: Desc"><label>Description:</label><br /><span data-bind="text: Desc" class="Desc"></span></p>
+                        <div class="row scn" data-bind="visible: screenshot">
+                            <div class="col-md-12">
+                                <a class="thumbnail">
+                                    <img src="" alt="" data-bind="attr: { src: screenshot, alt: name }" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="put" data-bind="visible: act() == 'Update' && !mod_loading() || act() == 'Add'">
+                        <div class="form-group name-ex">
+                            <label for="element-name" class="control-label">*Name:</label>
+                            <input data-bind="value: name, disable: act() == 'Update'" type="text" class="form-control required" id="element-name" name="ename" placeholder="underscore_naming_convention" />
+                        </div>
+                        <div class="form-group val-ex">
+                            <label for="element-val" class="control-label">*CSS Selector:</label>
+                            <input data-bind="value: value" type="text" class="form-control required" id="element-val" name="eval" placeholder="element #id .class [attribute='value']" />
+                        </div>
+                        <div class="form-group desc-ex">
+                            <label for="element-desc" class="control-label">Short Description:</label>
+                            <textarea data-bind="value: Desc" class="form-control" id="element-desc" name="edesc" placeholder="Describe the element here, its color, location, mobile only, etc."></textarea>
+                        </div>
+                        <div class="form-group scn-ex">
+                            <label for="element-scn" class="control-label">Screenshot:</label>
+                            <div class="row scn" data-bind="visible: screenshot">
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="thumbnail" data-toggle="tooltip" data-placement="bottom" title="You may upload a new file to replace the current screenshot">
+                                        <img src="" alt="" data-bind="attr: { src: screenshot, alt: name }" />
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="file" class="form-control" name="escn" value="" />
+                            <input data-bind="value: screenshot" type="hidden" id="element-scn" />
+                        </div>
+                    </div>
+                    <div data-bind="visible: mod_loading" class="progress active" style="width: 30em; margin: 0 auto;">
+                        <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%;">LOADING...</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="reset" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <input type="submit" data-bind="value: mod_btn, visible: mod_btn" class="btn btn-primary add" value="" />
+                    <button type="button" class="btn btn-primary" data-bind="click: selectElement.bind($data, 'Update', {Name: name()}), visible: mod_btn() == '' && $root.user">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="navbar" style="margin-bottom:5px;">
+    <p id="msg" class="navbar-text navbar-left text-success" style="display:none;"><span class="glyphicon glyphicon-ok"></span> <span data-bind="text: msg"></span><strong data-bind="text: name"></strong>!</p>
+    <div class="navbar-form navbar-right" role="search">
+        <button type="button" class="btn btn-success" data-bind="click: reloadElements"><span class="glyphicon glyphicon-refresh"></span> Refresh</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#elementModal" data-bind="visible: $root.user, click: selectElement.bind($data, 'Add')"><span class="glyphicon glyphicon-plus-sign"></span> New</button>
+        <div class="input-group">
+            <input type="text" class="form-control" data-bind="value: search, valueUpdate:'afterkeydown'" placeholder="Search" />
+            <span class="input-group-btn">
+                <button type="reset" class="btn btn-default" data-bind="click: clearSearch">Clear</button>
+            </span>
+        </div>
+    </div>
+</div>
+<table id="elementTable" class="table table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Value</th>
+            <th>Description</th>
+            <th></th>
+            <th style="text-align:center;">Options</th>
+        </tr>
+    </thead>
+    <tbody id="results" data-bind="foreach: filterElements" style="display: none;">
+        <tr data-bind="click: function(){location.hash=Name}">
+            <td><strong data-bind="text: Name"></strong></td>
+            <td data-bind="text: Value"></td>
+            <td data-bind="text: Desc"></td>
+            <td><a data-bind="visible: Screenshot" style="color:green;" data-toggle="tooltip" data-placement="bottom" title="Has a screenshot" data-container="body"><i class="glyphicon glyphicon-picture"></i></a></td>
+            <td style="text-align:center;">
+                <a href="#" data-toggle="modal" data-target="#elementModal" data-bind="click: $parent.selectElement.bind($data, 'View')">View</a>
+                <span data-bind="visible: $root.user"> | </span>
+                <a href="#" data-toggle="modal" data-target="#elementModal" data-bind="click: $parent.selectElement.bind($data, 'Update'), visible: $root.user">Update</a>
+            </td>
+        </tr>
+    </tbody>
+    <tr data-bind="visible: error" class="notfound" style="display:none;"><td colspan="5"><span class="glyphicon glyphicon-warning-sign"></span> &nbsp;<span data-bind="text: error"></span></td></tr>
+    <tr data-bind="visible: loading" class="">
+        <td colspan="5">
+            <div class="progress active" style="width: 30em; margin: 0 auto;">
+                <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%;">LOADING...</div>
+            </div>
+        </td>
+    </tr>
+</table>
+<!-- /ko -->
