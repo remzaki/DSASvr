@@ -230,6 +230,7 @@ var elementModel = function () {
         var request_flag = true;
         self.mod_loading(true);
         self.act(act);
+        self.screenshot('');
         switch (act) {
             case 'View':
                 self.mod_title('View Element')
@@ -243,7 +244,6 @@ var elementModel = function () {
                 self.name('');
                 self.value('');
                 self.Desc('');
-                self.screenshot('');
                 self.mod_loading(false);
                 self.mod_title('New Element')
                 self.mod_btn('Submit');
