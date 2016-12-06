@@ -226,6 +226,8 @@ var elementModel = function () {
     self.selectElement = function (act, data) {
         $('#msg').hide();
         $('#elementModal .modal-body input[type=file]').val('')
+        $("#element-scn").val('')
+        $(".modal-body .scn").hide();
         validator.resetForm();
         var request_flag = true;
         self.mod_loading(true);
